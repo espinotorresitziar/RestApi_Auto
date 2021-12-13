@@ -102,7 +102,18 @@ class DatoRoutes {
 
     //Borrar por matricula
 
-    
+    private deleteAutos = async (req: Request, res: Response) => {
+        const { matricula } = req.params
+        await db.conectarBD()
+        await Autos.findOneAndDelete(
+            {
+                _matricula: matricula
+            }
+        )
+        .then((doc:any) => res.send("Ha ido bien:" + doc))
+        .catch((err:any) => res.send("Error:" + err))
+        await db.desconectarBD()
+    }
 
     misRutas(){
         this._router.get('/autos', this.getAutos)
@@ -110,6 +121,7 @@ class DatoRoutes {
         //this._router.get('/autos/:matricula/:tipo', this.getMatTip)
         this._router.post('/newAuto', this.newAuto)
         this._router.put('/autos/:matricula', this.updatePotencia)
+        this._router.delete('/auto/:matricula', this.deleteAutos)
     }
 }
 
